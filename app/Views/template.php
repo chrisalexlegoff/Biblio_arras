@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://bootswatch.com/5/sketchy/bootstrap.min.css">
-    <title>Biblio | Accueil</title>
+    <title>Biblio | <?= $titre; ?></title>
 </head>
 
 <body>
@@ -23,15 +23,18 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./livres.php">Livres</a>
+                        <a class="nav-link" href="<?= SITE_URL ?>livres">Livres</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- <?php echo $content ?> -->
-    <?= $content ?>
+    <div id="container" class="m-2">
+        <h1 class="rounded border border-dark p-2 text-center text-white bg-info"><?= $titre ?></h1>
+        <div class="d-flex flex-wrap justify-content-center"> <?= $content ?></div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

@@ -1,18 +1,11 @@
-version: '3.8'
+name: 'biblio'
 
 services:
-  # service Php
-  php:
-    build: './php_docker/'
+  web:
+    build: .
+    container_name: biblio
     volumes:
-      - ./www/:/var/www/html
-
-  # service Apache
-  apache:
-    build: './apache_docker/'
-    depends_on:
-      - php
+      - ./:/var/www/html/
+      - '/var/www/html/vendor' # Prevents first volume from overwriting vendor directory.
     ports:
-      - '8080:80'
-    volumes:
-      - ./www/:/var/www/html
+      - '8000:80'
