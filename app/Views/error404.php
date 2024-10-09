@@ -1,7 +1,7 @@
 <?php ob_start() ?>
 
 
-<p>Le contenu n'est plus disponible</p>
+<p><?= $message ?>&nbsp;</p>
 <p>Contacter l'administrateur : <a href="mailto:contact@monsite.fr">ici</a></p>
 
 <?php
