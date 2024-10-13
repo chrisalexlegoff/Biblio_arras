@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Exception;
-use App\Repository\livresRepository;
+use App\Repository\LivresRepository;
+use App\Service\Utils;
+use App\Service\ValidationDonnees;
 
 class LivreController
 {
-    private $repositoryLivres;
+    private LivresRepository $repositoryLivres;
+    private ValidationDonnees $validationDonnees;
 
     public function __construct()
     {
-        $this->repositoryLivres = new livresRepository;
+        $this->repositoryLivres = new LivresRepository();
         $this->repositoryLivres->chargementLivresBdd();
+        $this->validationDonnees = new ValidationDonnees();
     }
 
     public function afficherLivres()
@@ -32,15 +35,69 @@ class LivreController
 
     public function ajouterLivre()
     {
+        // $_SESSION['datas'] = (!empty($_POST)) ? $_POST : [];
         require '../app/Views/ajouterLivre.php';
     }
 
     public function validationAjoutLivre()
     {
+
+        $_SESSION['datas'] = (!empty($_POST)) ? $_POST : [];
+
+        $erreurs = $this->validationDonnees->valider([
+            // 'titre' => ['min:3', 'required']
+            'titre' => ['match:/^[A-Z][a-zA-Z\- ]{3,25}$/'],
+            'nbre-de-pages' => ['match:/^\d{1,10}$/'],
+            'text-alternatif' => ['match:/^[a-zA-Z.\-\'\"\s]{10,150}$/']
+        ], $_POST);
+
+        if (is_array($erreurs) && count($erreurs) > 0) {
+            $_SESSION['erreurs'][] = $erreurs;
+            header('location: ' . SITE_URL . 'livres/a');
+            exit;
+        }
         $image = $_FILES['image'];
         $repertoire = "images/";
-        $nomImage = $this->ajoutImage($image, $repertoire);
+        $nomImage = Utils::ajoutImage($image, $repertoire);
+        // $_POST['titre']  = htmlspecialchars()
+
         $this->repositoryLivres->ajouterLivreBdd($_POST['titre'], (int)$_POST['nbre-de-pages'], $_POST['text-alternatif'], $nomImage);
+        // unset($_SESSION['datas']);
+        header('location: ' . SITE_URL . 'livres');
+    }
+
+    public function modifierLivre($idLivre)
+    {
+        $livre = $this->repositoryLivres->getLivreById($idLivre);
+        require '../app/Views/modifierLivre.php';
+    }
+
+    public function validationModifierLivre()
+    {
+        $erreurs = $this->validationDonnees->valider([
+            // 'titre' => ['min:3', 'required']
+            'titre' => ['match:/^[A-Z][a-zA-Z\- ]{3,25}$/'],
+            'nbre-de-pages' => ['match:/^\d{1,10}$/'],
+            'text-alternatif' => ['match:/^[a-zA-Z.\-\'\"\s]{10,150}$/']
+        ], $_POST);
+
+        if (is_array($erreurs) && count($erreurs) > 0) {
+            $_SESSION['erreurs'][] = $erreurs;
+            header('location: ' . SITE_URL . 'livres/a');
+            exit;
+        }
+
+        $idLivre = (int)$_POST['id_livre'];
+        $imageActuelle = $this->repositoryLivres->getLivreById($idLivre)->getUrlImage();
+        $imageUpload = $_FILES['image'];
+        $cheminImage = "images/$imageActuelle";
+        if ($imageUpload['size'] > 0) {
+            if (file_exists($cheminImage)) {
+                unlink($cheminImage);
+            }
+            $imageActuelle = Utils::ajoutImage($imageUpload, "images/");
+        }
+        $this->repositoryLivres->modificationLivreBdd($_POST['titre'], (int)$_POST['nbre-de-pages'], $_POST['text-alternatif'], $imageActuelle, $idLivre);
         header('location: ' . SITE_URL . 'livres');
     }
 
@@ -48,36 +105,11 @@ class LivreController
     {
         $nomImage = $this->repositoryLivres->getLivreById($idLivre)->getUrlImage();
         $filename = "images/$nomImage";
-        if (file_exists($filename)) unlink($filename);
+        if (file_exists($filename)) {
+            unlink($filename);
+
+        }
         $this->repositoryLivres->supprimerLivreBdd($idLivre);
         header('location: ' . SITE_URL . 'livres');
-    }
-
-    public function ajoutImage($image, $repertoire)
-    {
-        if (!isset($_FILES['image']) || empty($_FILES['image']))
-            throw new Exception('Vous devez uploader une image');
-
-        if (!file_exists($repertoire)) mkdir($repertoire, 0777);
-
-        $filename = uniqid() . "-" . $image['name'];
-        $target = $repertoire . $filename;
-
-        if (!getimagesize($image['tmp_name']))
-            throw new Exception('Vous devez uploader une image');
-
-        $extension = strtolower(pathinfo($image['name'], PATHINFO_EXTENSION));
-        $extensionsTab = ['png', 'webp', 'jpg'];
-
-        if (!in_array($extension, $extensionsTab))
-            throw new Exception("Extension non autorisée => ['png', 'webp', 'jpg']");
-
-        if ($image['size'] > 4000000) // 4MO
-            throw new Exception("Fichier trop volumineux : max 4MO");
-
-        if (!move_uploaded_file($image['tmp_name'], $target))
-            throw new Exception("Le transfert de l'image à échoué");
-        else
-            return $filename;
     }
 }
