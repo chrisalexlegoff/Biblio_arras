@@ -5,7 +5,7 @@ declare(strict_types=1);
 //------------------------------------
 function debug($var, $mode = 1)
 {
-    echo '<div style="background: blue; padding: 5px; float: right; clear: both; ">';
+    echo '<div style="background: "#acacf1"; padding: 5px; float: right; clear: both; ">';
     $trace = debug_backtrace();
     $trace = array_shift($trace);
     echo "Debug demandé dans le fichier : $trace[file] à la ligne $trace[line].<hr />";
