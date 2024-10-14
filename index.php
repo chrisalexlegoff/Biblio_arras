@@ -1,9 +1,10 @@
 <?php
 
 declare(strict_types=1);
-
+session_start();
 use App\Controller\LivreController;
-use \Dotenv\Dotenv;
+use App\Controller\UtilisateurController;
+use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createMutable(__DIR__);
 $dotenv->load();
@@ -11,7 +12,9 @@ require __DIR__ . '/app/lib/init.php';
 require __DIR__ . '/app/lib/functions.php';
 ?>
 <?php
-$livreController = new LivreController;
+// echo password_hash('T2*shjksjsjsjhg', PASSWORD_BCRYPT);
+$livreController = new LivreController();
+$utilisateurController = new UtilisateurController();
 try {
     if (empty($_GET['page'])) {
         require 'app/Views/accueil.php';
@@ -21,18 +24,27 @@ try {
             case 'livres':
                 if (empty($url[1])) {
                     $livreController->afficherLivres();
-                } else if ($url[1] === 'l') {
+                } elseif ($url[1] === 'l') {
                     $livreController->afficherUnLivre((int)$url[2]);
-                } else if ($url[1] === 'a') {
+                } elseif ($url[1] === 'a') {
                     $livreController->ajouterLivre();
-                } else if ($url[1] === 'av') {
+                } elseif ($url[1] === 'av') {
                     $livreController->validationAjoutLivre();
-                } else if ($url[1] === 'm') {
-                    echo "modification d'un livre";
-                } else if ($url[1] === 's') {
+                } elseif ($url[1] === 'm') {
+                    $livreController->modifierLivre((int)$url[2]);
+                } elseif ($url[1] === 'mv') {
+                    $livreController->validationModifierLivre();
+                } elseif ($url[1] === 's') {
                     $livreController->supprimerLivre((int)$url[2]);
                 } else {
                     throw new Exception("La page n'existe pas");
+                }
+                break;
+            case 'login':
+                if (empty($url[1])) {
+                    $utilisateurController->afficherConnexion();
+                } elseif ($url[1] === 'v') {
+                    $utilisateurController->connexionValidation();
                 }
                 break;
             default:
@@ -44,3 +56,4 @@ try {
     $message = $e->getMessage();
     require '../app/Views/error404.php';
 }
+?>

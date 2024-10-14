@@ -8,7 +8,7 @@ use PDO;
 use App\Models\Livre;
 use App\Service\AbstractConnexion;
 
-class livresRepository extends AbstractConnexion
+class LivresRepository extends AbstractConnexion
 {
     /**
      * Tableau de livres
@@ -58,6 +58,21 @@ class livresRepository extends AbstractConnexion
         $stmt->execute();
         $stmt->closeCursor();
     }
+
+    public function modificationLivreBdd(string $titre, int $nbreDePages, string $textAlternatif, string $nomImage, int $idLivre)
+    {
+        // protection injection sql
+        $req = "UPDATE livre SET titre = :titre, nbre_de_pages = :nbre_de_pages, text_alternatif = :text_alternatif, url_image = :url_image WHERE id_livre = :id_livre";
+        $stmt = $this->getConnexionBdd()->prepare($req);
+        $stmt->bindValue(":id_livre", $idLivre, PDO::PARAM_INT);
+        $stmt->bindValue(":titre", $titre, PDO::PARAM_STR);
+        $stmt->bindValue(":nbre_de_pages", $nbreDePages, PDO::PARAM_INT);
+        $stmt->bindValue(":url_image", $nomImage, PDO::PARAM_STR);
+        $stmt->bindValue(":text_alternatif", $textAlternatif, PDO::PARAM_STR);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
 
     public function supprimerLivreBdd($idLivre)
     {
