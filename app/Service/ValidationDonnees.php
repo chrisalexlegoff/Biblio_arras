@@ -57,6 +57,12 @@ class ValidationDonnees
         $pattern = substr($regle, 6);
         if (!preg_match($pattern, $data)) {
             switch ($name) {
+                case 'password':
+                    $this->erreurs[$name][] = "Le mot de passe doit contenir minimum 12 caracteres, minimum 1 caractere special, une majuscule et 1 chiffre";
+                    break;
+                case 'email':
+                    $this->erreurs[$name][] = "L' adresse email n'est pas valide";
+                    break;
                 case 'titre':
                     $this->erreurs[$name][] = "Le champ {$name} doit commencer par une lettre majuscule, contenir minimum 3 lettres et maximum 20 lettres, espaces et '-'(tiret du 6) autorisés";
                     break;

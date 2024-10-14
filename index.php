@@ -3,6 +3,7 @@
 declare(strict_types=1);
 session_start();
 use App\Controller\LivreController;
+use App\Controller\UtilisateurController;
 use Dotenv\Dotenv;
 
 $dotenv = Dotenv::createMutable(__DIR__);
@@ -11,7 +12,9 @@ require __DIR__ . '/app/lib/init.php';
 require __DIR__ . '/app/lib/functions.php';
 ?>
 <?php
+// echo password_hash('T2*shjksjsjsjhg', PASSWORD_BCRYPT);
 $livreController = new LivreController();
+$utilisateurController = new UtilisateurController();
 try {
     if (empty($_GET['page'])) {
         require 'app/Views/accueil.php';
@@ -35,6 +38,13 @@ try {
                     $livreController->supprimerLivre((int)$url[2]);
                 } else {
                     throw new Exception("La page n'existe pas");
+                }
+                break;
+            case 'login':
+                if (empty($url[1])) {
+                    $utilisateurController->afficherConnexion();
+                } elseif ($url[1] === 'v') {
+                    $utilisateurController->connexionValidation();
                 }
                 break;
             default:
