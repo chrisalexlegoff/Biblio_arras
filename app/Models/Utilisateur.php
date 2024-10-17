@@ -11,19 +11,22 @@ class Utilisateur
     private string $password;
     private string $email;
     private string $role;
+    private bool $isValide;
 
     public function __construct(
         int $id_utilisateur,
         string $identifiant,
         string $password,
         string $email,
-        string $role
+        string $role,
+        bool $isValide = false
     ) {
         $this->id_utilisateur =  $id_utilisateur;
         $this->identifiant = $identifiant;
         $this->password = $password;
         $this->email =  $email;
         $this->role = $role;
+        $this->isValide = $isValide;
     }
 
     /**
@@ -138,6 +141,27 @@ class Utilisateur
     public function setRole(string $role): self
     {
         $this->role = $role;
+        return $this;
+    }
+
+    /**
+     * Get the value of isValide
+     *
+     * @return bool
+     */
+    public function getIsValide(): bool {
+        return $this->isValide;
+    }
+
+    /**
+     * Set the value of isValide
+     *
+     * @param bool $isValide
+     *
+     * @return self
+     */
+    public function setIsValide(bool $isValide): self {
+        $this->isValide = $isValide;
         return $this;
     }
 }

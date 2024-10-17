@@ -60,6 +60,9 @@ class ValidationDonnees
                 case 'password':
                     $this->erreurs[$name][] = "Le mot de passe doit contenir minimum 12 caracteres, minimum 1 caractere special, une majuscule et 1 chiffre";
                     break;
+                case 'identifiant':
+                    $this->erreurs[$name][] = "L'identifiant ne correspond pas : pas d'espace, ni de caractères spéciaux";
+                    break;
                 case 'email':
                     $this->erreurs[$name][] = "L' adresse email n'est pas valide";
                     break;
@@ -74,7 +77,6 @@ class ValidationDonnees
                     break;
             }
         }
-
     }
 
     /**

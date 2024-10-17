@@ -3,6 +3,10 @@
   padding: 0;
 }
 
+img {
+  max-width: 100%;
+}
+
 form {
   width: 100%;
   max-width: 781px;
@@ -11,4 +15,15 @@ form {
 
 textarea {
   resize: none;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
+nav .navbar-brand img {
+  height: 50px !important;
+  width: auto;
 }
