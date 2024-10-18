@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+/**
+ * Classe ValidationDonnees
+ * 
+ * Cette classe gère la validation des données selon des règles spécifiées.
+ */
 class ValidationDonnees
 {
+    /** @var array Stocke les erreurs de validation */
     private array $erreurs = [];
 
+    /**
+     * Valide les données selon les règles spécifiées
+     *
+     * @param array $regles Les règles de validation
+     * @param array $datas Les données à valider
+     * @return array Les erreurs de validation
+     */
     public function valider(array $regles, array $datas)
     {
-        // echo '<pre>';
-        // print_r($regles);
-        // echo '</pre>';
         foreach ($regles as $key => $regleTab) {
             if (array_key_exists($key, $datas)) {
                 foreach ($regleTab as $regle) {
@@ -33,6 +43,12 @@ class ValidationDonnees
         return $this->getErreurs();
     }
 
+    /**
+     * Vérifie si un champ est requis
+     *
+     * @param string $name Nom du champ
+     * @param string|int|bool $data Valeur du champ
+     */
     public function required(string $name, string|int|bool $data)
     {
         $value = trim($data);
@@ -41,17 +57,29 @@ class ValidationDonnees
         }
     }
 
+    /**
+     * Vérifie la longueur minimale d'un champ
+     *
+     * @param string $name Nom du champ
+     * @param string $value Valeur du champ
+     * @param string $regle Règle de validation (ex: 'min3')
+     */
     private function min(string $name, string $value, string $regle): void
     {
-        // preg_match_all('/(\d+)/', $regle, $matches);
-        // $limit = $matches[0][0]; // => 3
-        $limit =  (int)substr($regle, 3);
+        $limit = (int)substr($regle, 3);
 
         if (strlen($value) < $limit) {
             $this->erreurs[$name][] = "Le champ {$name} doit contenir un minimum de {$limit} caractères";
         }
     }
 
+    /**
+     * Vérifie si un champ correspond à un motif spécifique
+     *
+     * @param string $name Nom du champ
+     * @param string|int|bool $data Valeur du champ
+     * @param string $regle Règle de validation (ex: 'match/^[A-Z]/')
+     */
     public function match(string $name, string|int|bool $data, string $regle)
     {
         $pattern = substr($regle, 6);
@@ -80,9 +108,9 @@ class ValidationDonnees
     }
 
     /**
-     * Get the value of erreurs
+     * Récupère les erreurs de validation
      *
-     * @return array
+     * @return array Les erreurs de validation
      */
     public function getErreurs(): array
     {

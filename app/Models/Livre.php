@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+/**
+ * Classe Livre
+ * 
+ * Cette classe représente un livre dans le système.
+ * Elle contient les informations de base d'un livre comme son titre,
+ * le nombre de pages, l'URL de l'image de couverture, etc.
+ */
 class Livre
 {
+    // Propriétés de la classe
     private int $id;
     private string $titre;
     private int $nbreDePages;
@@ -14,6 +22,17 @@ class Livre
     private int|null $idUtilisateur;
     private string $uploader;
 
+    /**
+     * Constructeur de la classe Livre
+     * 
+     * @param int $id Identifiant unique du livre
+     * @param string $titre Titre du livre
+     * @param int $nbreDePages Nombre de pages du livre
+     * @param string $urlImage URL de l'image de couverture du livre
+     * @param string $textAlternatif Texte alternatif pour l'image de couverture
+     * @param int|null $idUtilisateur Identifiant de l'utilisateur associé au livre (peut être null)
+     * @param string $uploader Nom de l'utilisateur qui a uploadé le livre
+     */
     public function __construct(
         int $id,
         string $titre,

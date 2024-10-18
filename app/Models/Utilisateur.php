@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+/**
+ * Classe Utilisateur
+ * 
+ * Cette classe représente un utilisateur dans le système.
+ * Elle contient les informations de base d'un utilisateur telles que
+ * son identifiant, son mot de passe, son email, son rôle et son statut de validation.
+ */
 class Utilisateur
 {
+    // Propriétés privées de la classe
     private int $id_utilisateur;
     private string $identifiant;
     private string $password;
@@ -13,6 +21,16 @@ class Utilisateur
     private string $role;
     private bool $isValide;
 
+    /**
+     * Constructeur de la classe Utilisateur
+     * 
+     * @param int $id_utilisateur Identifiant unique de l'utilisateur
+     * @param string $identifiant Nom d'utilisateur
+     * @param string $password Mot de passe de l'utilisateur
+     * @param string $email Adresse email de l'utilisateur
+     * @param string $role Rôle de l'utilisateur dans le système
+     * @param bool $isValide Statut de validation de l'utilisateur (par défaut : false)
+     */
     public function __construct(
         int $id_utilisateur,
         string $identifiant,
@@ -145,9 +163,9 @@ class Utilisateur
     }
 
     /**
-     * Get the value of isValide
+     * Obtient la valeur de isValide
      *
-     * @return bool
+     * @return bool Statut de validation de l'utilisateur
      */
     public function getIsValide(): bool
     {
@@ -155,9 +173,9 @@ class Utilisateur
     }
 
     /**
-     * Set the value of isValide
+     * Définit la valeur de isValide
      *
-     * @param bool $isValide
+     * @param bool $isValide Nouveau statut de validation
      *
      * @return self
      */

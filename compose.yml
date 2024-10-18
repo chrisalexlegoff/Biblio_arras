@@ -5,9 +5,10 @@ services:
     build: .
     volumes:
       - ./:/var/www/html/
-      # - '/var/www/html/vendor' # Prevents first volume from overwriting vendor directory.
     ports:
       - '8000:80'
+    depends_on:
+      - mailhog
 
   mariadb:
     image: mariadb:latest
@@ -30,6 +31,13 @@ services:
       - PMA_HOST=${MYSQL_HOST}
     depends_on:
       - mariadb
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - '1025:1025' # Port SMTP pour capturer les e-mails
+      - '8025:8025' # Port HTTP pour accéder à l'interface Web de MailHog
 
 volumes:
   bibliothequedb:

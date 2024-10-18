@@ -10,19 +10,31 @@ use App\Repository\LivresRepository;
 use App\Controller\UtilisateurController;
 use App\Service\Csrf;
 
+/**
+ * Contrôleur pour la gestion des livres
+ */
 class LivreController
 {
     private LivresRepository $repositoryLivres;
     private ValidationDonnees $validationDonnees;
     private UtilisateurController $utilisateurController;
 
+    /**
+     * Constructeur du contrôleur
+     * Initialise les dépendances et charge les livres selon le rôle de l'utilisateur
+     */
     public function __construct()
     {
+        // Initialisation des dépendances
         $this->repositoryLivres = new LivresRepository();
         $this->validationDonnees = new ValidationDonnees();
         $this->utilisateurController = new UtilisateurController();
+
+        // Vérification du rôle de l'utilisateur
         $isAdmin = $this->utilisateurController->isRoleAdmin();
         $isUser = $this->utilisateurController->isRoleUser();
+
+        // Chargement des livres selon le rôle
         if ($isAdmin) {
             $this->repositoryLivres->chargementLivresBdd();
         } elseif ($isUser) {
@@ -30,6 +42,9 @@ class LivreController
         }
     }
 
+    /**
+     * Affiche la liste des livres
+     */
     public function afficherLivres()
     {
         $this->utilisateurController->redirectLogin();
@@ -42,6 +57,11 @@ class LivreController
         require "../app/Views/livres.php";
     }
 
+    /**
+     * Affiche les détails d'un livre spécifique
+     * 
+     * @param int $idLivre L'ID du livre à afficher
+     */
     public function afficherUnLivre($idLivre)
     {
         $livre = $this->repositoryLivres->getLivreById($idLivre);
@@ -53,6 +73,9 @@ class LivreController
         require "../app/Views/error404.php";
     }
 
+    /**
+     * Affiche le formulaire d'ajout d'un livre
+     */
     public function ajouterLivre()
     {
         $this->utilisateurController->redirectLogin();
@@ -60,6 +83,9 @@ class LivreController
         require '../app/Views/ajouterLivre.php';
     }
 
+    /**
+     * Traite la soumission du formulaire d'ajout d'un livre
+     */
     public function validationAjoutLivre()
     {
         Csrf::check();
@@ -97,6 +123,11 @@ class LivreController
         header('location: ' . SITE_URL . 'livres');
     }
 
+    /**
+     * Affiche le formulaire de modification d'un livre
+     * 
+     * @param int $idLivre L'ID du livre à modifier
+     */
     public function modifierLivre($idLivre)
     {
         $this->utilisateurController->redirectLogin();
@@ -105,6 +136,9 @@ class LivreController
         require '../app/Views/modifierLivre.php';
     }
 
+    /**
+     * Traite la soumission du formulaire de modification d'un livre
+     */
     public function validationModifierLivre()
     {
         Csrf::check();
@@ -141,6 +175,11 @@ class LivreController
         header('location: ' . SITE_URL . 'livres');
     }
 
+    /**
+     * Supprime un livre
+     * 
+     * @param int $idLivre L'ID du livre à supprimer
+     */
     public function supprimerLivre($idLivre)
     {
         $this->utilisateurController->redirectLogin();
@@ -158,14 +197,22 @@ class LivreController
         header('location: ' . SITE_URL . 'livres');
     }
 
+    /**
+     * Récupère tous les livres et les affiche sur la page d'accueil
+     */
     public function getAllLivres()
     {
+        // Vérifie si l'utilisateur n'est ni admin ni utilisateur standard
         if (!$this->utilisateurController->isRoleAdmin() || !$this->utilisateurController->isRoleUser()) {
+            // Réinitialise la liste des livres et charge tous les livres de la BDD
             $this->repositoryLivres->setLivres([]);
             $livresAll = $this->repositoryLivres->chargementLivresBdd();
         } else {
+            // Utilise la liste des livres déjà chargée
             $livresAll = $this->repositoryLivres->getLivres();
         }
+
+        // Affiche la vue de la page d'accueil
         require '../app/Views/accueil.php';
     }
 }

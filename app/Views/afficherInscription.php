@@ -1,7 +1,24 @@
-<?php ob_start() ?>
-<?php require '../app/Views/showAlert.php'; ?>
-<?php debug($_SESSION); ?>
+<?php
+
+/**
+ * Vue pour afficher le formulaire d'inscription
+ *
+ * Cette vue gère l'affichage du formulaire d'inscription, y compris la gestion des erreurs
+ * et la conservation des anciennes valeurs en cas de soumission invalide.
+ *
+ * @package App\Views
+ */
+
+// Début de la capture de sortie
+ob_start();
+
+// Inclusion du fichier pour afficher les alertes
+require '../app/Views/showAlert.php';
+?>
+
+<!-- Conteneur principal du formulaire -->
 <div class="d-flex flex-column justify-content-center">
+    <!-- Formulaire d'inscription -->
     <form class="m-auto w-50" method="post" action="<?= SITE_URL ?>inscription/v">
         <fieldset>
             <legend>Inscription</legend>
@@ -72,17 +89,22 @@
                 <?php endif; ?>
             </div>
 
-            <!-- CSRF Token -->
+            <!-- Insertion du jeton CSRF -->
             <?= $csrfToken ?>
 
-            <!-- Bouton de soumission -->
-            <button type="submit" class="btn btn-primary mt-2">S'inscrire</button>
+            <!-- Bouton de soumission du formulaire -->
+            <button type="submit" class="btn btn-primary mt-5">S'inscrire</button>
         </fieldset>
     </form>
 </div>
 
 <?php
+// Définition du titre de la page
 $titre = "Inscription";
+
+// Récupération du contenu mis en mémoire tampon
 $content = ob_get_clean();
+
+// Inclusion du template principal
 require_once 'template.php';
 ?>
