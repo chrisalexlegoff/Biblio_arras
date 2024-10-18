@@ -1,7 +1,9 @@
 <?php
 
 declare(strict_types=1);
+
 session_start();
+
 use App\Controller\LivreController;
 use App\Controller\UtilisateurController;
 use Dotenv\Dotenv;
@@ -12,12 +14,12 @@ require __DIR__ . '/app/lib/init.php';
 require __DIR__ . '/app/lib/functions.php';
 ?>
 <?php
-// echo password_hash('T2*shjksjsjsjhg', PASSWORD_BCRYPT);
+// echo password_hash('mon_password', PASSWORD_BCRYPT);
 $livreController = new LivreController();
 $utilisateurController = new UtilisateurController();
 try {
     if (empty($_GET['page'])) {
-        require 'app/Views/accueil.php';
+        $livreController->getAllLivres();
     } else {
         $url = explode("/", filter_var($_GET['page'], FILTER_SANITIZE_URL));
         switch ($url[0]) {
@@ -40,12 +42,38 @@ try {
                     throw new Exception("La page n'existe pas");
                 }
                 break;
-            case 'login':
+            case 'connexion':
                 if (empty($url[1])) {
                     $utilisateurController->afficherConnexion();
                 } elseif ($url[1] === 'v') {
                     $utilisateurController->connexionValidation();
                 }
+                break;
+            case 'profil':
+                if (empty($url[1])) {
+                    $utilisateurController->afficherProfil();
+                } elseif ($url[1] === 'm') {
+                    $utilisateurController->modificationProfil((int)$url[2]);
+                }
+                break;
+            case 'inscription':
+                if (empty($url[1])) {
+                    $utilisateurController->afficherInscription();
+                } elseif ($url[1] === 'v') {
+                    $utilisateurController->inscriptionValidation();
+                }
+                break;
+            case 'gestion-membres':
+                if (empty($url[1])) {
+                    $utilisateurController->afficherGestionMembres();
+                } elseif ($url[1] === 'm') {
+                    $utilisateurController->modifierUtilisateurByAdmin((int)$url[2]);
+                } elseif ($url[1] === 's') {
+                    $utilisateurController->supprimerUtilisateurByAdmin((int)$url[2]);
+                }
+                break;
+            case 'deconnexion':
+                $utilisateurController->logout();
                 break;
             default:
                 throw new Exception("La page n'existe pas");
@@ -54,6 +82,5 @@ try {
     }
 } catch (Exception $e) {
     $message = $e->getMessage();
-    require '../app/Views/error404.php';
+    include '../app/Views/error404.php';
 }
-?>
