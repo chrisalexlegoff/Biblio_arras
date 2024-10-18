@@ -1,14 +1,12 @@
 <?php ob_start() ?>
-<div class="d-flex flex-column justify-content-center">
-    <div class="row w-100">
-        <div class="col-6">
-            <img style='max-width:100%;' src="<?= SITE_URL ?>images/<?= $livre->getUrlImage() ?>" alt="<?= $livre->getTextAlternatif() ?>">
-        </div>
-        <div class="col-6">
-            <p>Titre : <?= $livre->getTitre() ?></p>
-            <p>Nombre de pages : <?= $livre->getNbreDePages() ?></p>
-            <p>Uploader : <?= $livre->getUploader() ?></p>
-        </div>
+<div class="livre-container">
+    <div class="livre-image-container">
+        <img class="livre-image" src="<?= SITE_URL ?>images/<?= $livre->getUrlImage() ?>" alt="<?= $livre->getTextAlternatif() ?>">
+    </div>
+    <div class="livre-details">
+        <p><strong>Titre :</strong> <?= $livre->getTitre() ?></p>
+        <p><strong>Nombre de pages :</strong> <?= $livre->getNbreDePages() ?></p>
+        <p><strong>Uploader :</strong> <?= $livre->getUploader() ?></p>
     </div>
 </div>
 <?php

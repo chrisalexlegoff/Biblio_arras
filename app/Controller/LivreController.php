@@ -64,29 +64,36 @@ class LivreController
     {
         Csrf::check();
         $this->utilisateurController->redirectLogin();
+        unset($_SESSION['erreurs']);
+        unset($_SESSION['old_values']);
         $erreurs = $this->validationDonnees->valider([
-            // 'titre' => ['min:3', 'required']
             'titre' => ['match:/^[A-Z][a-zA-Z\- ]{3,25}$/'],
             'nbre-de-pages' => ['match:/^\d{1,10}$/'],
             'text-alternatif' => ['match:/^[a-zA-Z.\-\'\"\s]{10,150}$/']
         ], $_POST);
 
         if (is_array($erreurs) && count($erreurs) > 0) {
-            $_SESSION['erreurs'][] = $erreurs;
+            $_SESSION['erreurs'] = $erreurs;
+            $_SESSION['old_values'] = $_POST;
             header('location: ' . SITE_URL . 'livres/a');
             exit;
         }
+
         $image = $_FILES['image'];
         $repertoire = "images/";
         $nomImage = Utils::ajoutImage($image, $repertoire);
-        // $_POST['titre']  = htmlspecialchars()
+
+        if (isset($_SESSION['erreurs']) && count($_SESSION['erreurs']) > 0) {
+            $_SESSION['old_values'] = $_POST;
+            header('location: ' . SITE_URL . 'livres/a');
+            exit;
+        }
 
         $this->repositoryLivres->ajouterLivreBdd($_POST['titre'], (int)$_POST['nbre-de-pages'], $_POST['text-alternatif'], $nomImage);
         $_SESSION['alert'] = [
             "type" => "success",
             "message" => "Le livre $_POST[titre] a été ajouté avec succès!"
         ];
-        // unset($_SESSION['datas']);
         header('location: ' . SITE_URL . 'livres');
     }
 
@@ -101,16 +108,18 @@ class LivreController
     public function validationModifierLivre()
     {
         Csrf::check();
+        unset($_SESSION['erreurs']);
+        unset($_SESSION['old_values']);
         $erreurs = $this->validationDonnees->valider([
-            // 'titre' => ['min:3', 'required']
             'titre' => ['match:/^[A-Z][a-zA-Z\- ]{3,25}$/'],
             'nbre-de-pages' => ['match:/^\d{1,10}$/'],
             'text-alternatif' => ['match:/^[a-zA-Z.\-\'\"\s]{10,150}$/']
         ], $_POST);
 
         if (is_array($erreurs) && count($erreurs) > 0) {
-            $_SESSION['erreurs'][] = $erreurs;
-            header('location: ' . SITE_URL . 'livres/m/' . (int)$_POST['$id_livre']);
+            $_SESSION['erreurs'] = $erreurs;
+            $_SESSION['old_values'] = $_POST;
+            header('location: ' . SITE_URL . 'livres/m/' . (int)$_POST['id_livre']);
             exit;
         }
 

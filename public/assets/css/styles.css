@@ -27,3 +27,158 @@ nav .navbar-brand img {
   height: 50px !important;
   width: auto;
 }
+
+/**
+Style accueil */
+
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container for all books */
+.livres-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* Book card styles */
+.livre-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 300px;
+  min-width: 250px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.livre-card:hover {
+  transform: scale(1.05);
+}
+
+/* Book title */
+.livre-title {
+  background-color: #f5f5f5;
+  padding: 10px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Book image */
+.livre-image {
+  width: 150px;
+  height: auto;
+  margin: 10px auto;
+}
+
+/* Book body */
+.livre-body {
+  padding: 10px;
+}
+
+/* Book link */
+.livre-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.livre-link:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .livre-card {
+    width: 100%;
+    max-width: 350px;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .livres-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .livre-card {
+    width: 100%;
+  }
+}
+/* Container for the book details */
+.livre-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  gap: 20px;
+}
+
+/* Image container */
+.livre-image-container {
+  flex: 1 1 300px;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+}
+
+.livre-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Book details container */
+.livre-details {
+  flex: 1 1 300px;
+  max-width: 500px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.livre-details p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .livre-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .livre-details {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .livre-container {
+    margin: 10px;
+  }
+
+  .livre-details p {
+    font-size: 1rem;
+  }
+}

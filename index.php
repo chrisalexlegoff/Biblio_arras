@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 session_start();
+
 use App\Controller\LivreController;
 use App\Controller\UtilisateurController;
 use Dotenv\Dotenv;
@@ -52,7 +53,7 @@ try {
                 if (empty($url[1])) {
                     $utilisateurController->afficherProfil();
                 } elseif ($url[1] === 'm') {
-                    $utilisateurController->modificationProfil($url[2]);
+                    $utilisateurController->modificationProfil((int)$url[2]);
                 }
                 break;
             case 'inscription':
@@ -70,7 +71,7 @@ try {
                 } elseif ($url[1] === 's') {
                     $utilisateurController->supprimerUtilisateurByAdmin((int)$url[2]);
                 }
-                    break;
+                break;
             case 'deconnexion':
                 $utilisateurController->logout();
                 break;

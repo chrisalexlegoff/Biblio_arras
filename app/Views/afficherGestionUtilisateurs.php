@@ -14,8 +14,6 @@
                 <th colspan="2">Actions</th>
             </tr>
             <?php
-            // $livresTab = $repositoryLivres->getLivres();
-
             foreach ($utilisateurs as $utilisateur) : ?>
                 <tr>
                     <td class="align-middle"><?= $utilisateur->getIdUtilisateur(); ?></td>
@@ -32,7 +30,6 @@
                         </td>
 
                         <td class="align-middle">
-                            <!-- Toggle switch pour le statut de validation -->
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="isValide_<?= $utilisateur->getIdUtilisateur(); ?>" name="isValide" <?= $utilisateur->getIsValide() ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="isValide_<?= $utilisateur->getIdUtilisateur(); ?>">
@@ -42,7 +39,6 @@
                         </td>
 
                         <td class="align-middle">
-                            <!-- Bouton Modifier -->
                             <button class="btn btn-warning">Modifier</button>
                         </td>
                     </form>

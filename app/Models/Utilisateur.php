@@ -149,7 +149,8 @@ class Utilisateur
      *
      * @return bool
      */
-    public function getIsValide(): bool {
+    public function getIsValide(): bool
+    {
         return $this->isValide;
     }
 
@@ -160,7 +161,8 @@ class Utilisateur
      *
      * @return self
      */
-    public function setIsValide(bool $isValide): self {
+    public function setIsValide(bool $isValide): self
+    {
         $this->isValide = $isValide;
         return $this;
     }
